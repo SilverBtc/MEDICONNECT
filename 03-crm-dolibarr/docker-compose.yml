@@ -1,0 +1,31 @@
+services:
+  mariadb:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ChangeMeRoot2026!
+      MARIADB_DATABASE: dolibarr
+      MARIADB_USER: dolibarr
+      MARIADB_PASSWORD: ChangeMeDoli2026!
+    volumes:
+      - dbdata:/var/lib/mysql
+  crm:
+    image: dolibarr/dolibarr:21
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8082:80"
+    environment:
+      DOLI_DB_HOST: mariadb
+      DOLI_DB_NAME: dolibarr
+      DOLI_DB_USER: dolibarr
+      DOLI_DB_PASSWORD: ChangeMeDoli2026!
+      DOLI_ADMIN_LOGIN: admin
+      DOLI_ADMIN_PASSWORD: Admin2026!
+      DOLI_URL_ROOT: http://crm.mediconnect.local
+    volumes:
+      - dolifiles:/var/www/documents
+    depends_on:
+      - mariadb
+volumes:
+  dbdata:
+  dolifiles:
